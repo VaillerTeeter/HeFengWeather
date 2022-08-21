@@ -24,17 +24,16 @@ _LOGGER = logging.getLogger(__name__)
 
 TIME_BETWEEN_UPDATES = timedelta(seconds=600)
 
-CONF_OPTIONS = "options"
-CONF_LOCATION = "location"
-CONF_KEY = "key"
+CONF_OPTIONS       = "options"
+CONF_LOCATION      = "location"
+CONF_KEY           = "key"
 CONF_DISASTERLEVEL = "disasterlevel"
-CONF_DISASTERMSG = "disastermsg"
+CONF_DISASTERMSG   = "disastermsg"
 
 # 定义三个可选项：温度、湿度、PM2.5
 OPTIONS = {
-    "temprature": ["HeFengweather_temperature", "室外温度", "mdi:thermometer", TEMP_CELSIUS],
-
-    # "humidity": ["Heweather_humidity", "室外湿度", "mdi:water-percent", "%"],
+    "temprature": ["HeFengweather_temperature", "室外温度", "mdi:thermometer"  , TEMP_CELSIUS],
+    "humidity"  : ["HeFengweather_humidity"   , "室外湿度", "mdi:water-percent", "%"         ],
     # "feelsLike": ["Heweather_feelsLike", "体感温度", "mdi:thermometer", TEMP_CELSIUS],
     # "text": ["Heweather_text", "天气描述", "mdi:thermometer", ' '],
     # "precip": ["Heweather_precip", "小时降水量", "mdi:thermometer", '毫米'],
@@ -108,14 +107,14 @@ def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
 # 温度传感器的类
 class HeweatherWeatherSensor(Entity):
     def __init__(self, data, option):
-        self._data = data
-        self._object_id = OPTIONS[option][0]
-        self._friendly_name = OPTIONS[option][1]
-        self._icon = OPTIONS[option][2]
+        self._data                = data
+        self._object_id           = OPTIONS[option][0]
+        self._friendly_name       = OPTIONS[option][1]
+        self._icon                = OPTIONS[option][2]
         self._unit_of_measurement = OPTIONS[option][3]
 
-        self._type = option
-        self._state = None
+        self._type       = option
+        self._state      = None
         self._updatetime = None
 
     # 返回实体的名字
@@ -156,10 +155,10 @@ class HeweatherWeatherSensor(Entity):
     def async_update(self):
         self._updatetime = self._data.updatetime
 
-        if self._type == "temprature":
+        if self._type   == "temprature":
             self._state = self._data.temprature
-        # elif self._type == "humidity":
-        #     self._state = self._data.humidity
+        elif self._type == "humidity":
+            self._state = self._data.humidity
         # elif self._type == "feelsLike":
         #     self._state = self._data.feelsLike
         # elif self._type == "text":
@@ -207,7 +206,7 @@ class WeatherData(object):
         self._disaster_warn_url = "https://devapi.qweather.com/v7/warning/now?location="+location+"&key="+key
         self._params = {"location": location, "key": key}
         self._temprature = None
-        # self._humidity = None
+        self._humidity   = None
         # self._feelsLike = None
         # self._text = None
         # self._windDir = None
@@ -237,10 +236,10 @@ class WeatherData(object):
     def temprature(self):
         return self._temprature
 
-    # @property
-    # def humidity(self):
-    #     """湿度."""
-    #     return self._humidity
+    # 湿度
+    @property
+    def humidity(self):
+        return self._humidity
 
     # @property
     # def feelsLike(self):
@@ -378,8 +377,9 @@ class WeatherData(object):
             return
 
         # 根据http返回的结果，更新数据
+        self._updatetime = weather["obsTime"]
         self._temprature = weather["temp"]
-        # self._humidity = weather["humidity"]
+        self._humidity   = weather["humidity"]
         # self._feelsLike = weather["feelsLike"]
         # self._text = weather["text"]
         # self._windDir = weather["windDir"]
@@ -390,7 +390,7 @@ class WeatherData(object):
         # self._vis = weather["vis"]
         # self._cloud = weather["cloud"]
         # self._dew = weather["dew"]
-        self._updatetime = weather["obsTime"]
+        
         # self._category = air["category"]
         # self._pm25 = air["pm2p5"]
         # self._pm10 = air["pm10"]
