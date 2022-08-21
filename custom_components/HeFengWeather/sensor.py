@@ -32,18 +32,21 @@ CONF_DISASTERMSG   = "disastermsg"
 
 # 定义三个可选项：温度、湿度、PM2.5
 OPTIONS = {
-    "temprature": ["HeFengweather_temperature", "室外温度", "mdi:thermometer"  , TEMP_CELSIUS],
-    "humidity"  : ["HeFengweather_humidity"   , "室外湿度", "mdi:water-percent", "%"         ],
-    # "feelsLike": ["Heweather_feelsLike", "体感温度", "mdi:thermometer", TEMP_CELSIUS],
-    # "text": ["Heweather_text", "天气描述", "mdi:thermometer", ' '],
-    # "precip": ["Heweather_precip", "小时降水量", "mdi:thermometer", '毫米'],
-    # "windDir": ["Heweather_windDir", "风向", "mdi:thermometer", ' '],
-    # "windScale": ["Heweather_windScale", "风力等级", "mdi:thermometer", ' '],
-    # "windSpeed": ["Heweather_windSpeed", "风速", "mdi:thermometer", '公里/小时'],
-    # "dew": ["Heweather_dew", "露点温度", "mdi:thermometer", ' '],
-    # "pressure": ["Heweather_pressure", "大气压强", "mdi:thermometer", '百帕'],
-    # "vis": ["Heweather_vis", "能见度", "mdi:thermometer", 'km'],
-    # "cloud": ["Heweather_cloud", "云量", "mdi:thermometer", ' '],
+    "temprature": ["HeFengweather_temperature", "室外温度"    , "mdi:thermometer"           , TEMP_CELSIUS],
+    "humidity"  : ["HeFengweather_humidity"   , "室外湿度"    , "mdi:water-percent"         , "%"         ],
+    "feelsLike" : ["HeFengweather_feelsLike"  , "体感温度"    , "mdi:thermometer"           , TEMP_CELSIUS],
+    "icon"      : ["HeFengweather_icon"       , "天气图标"    , None                        , None        ],
+    "text"      : ["HeFengweather_text"       , "天气描述"    , None                        , None        ],
+    "wind360"   : ["HeFengweather_wind360"    , "风向360角度" , "mdi:weather-windy"         , None        ],
+    "windDir"   : ["HeFengweather_windDir"    , "风向"        , "mdi:weather-windy"         , None        ],
+    "windScale" : ["HeFengweather_windScale"  , "风力等级"    , "mdi:weather-windy"         , None        ],
+    "windSpeed" : ["HeFengweather_windSpeed"  , "风速"        , "mdi:weather-windy"         , "km/h"      ],
+    "precip"    : ["HeFengweather_precip"     , "此小时降水量" , "mdi:weather-pouring"      , "mm"        ],
+    "pressure"  : ["HeFengweather_pressure"   , "大气压强"    , "mdi:car-brake-low-pressure", "hPa"       ],
+    "vis"       : ["HeFengweather_vis"        , "能见度"      , "mdi:eye-outline"           , "km"        ],
+    "cloud"     : ["HeFengweather_cloud"      , "云量"        , "mdi:clouds"                , None        ],
+    "dew"       : ["HeFengweather_dew"        , "露点温度"    , "mdi:thermometer"           , None        ],
+    
     # "primary": ["Heweather_primary", "空空气质量的主要污染物", "mdi:walk", " "],
     # "category": ["Heweather_category", "空气质量指数级别", "mdi:walk", " "],
     # "level": ["Heweather_level", "空气质量指数等级", "mdi:walk", " "],
@@ -159,18 +162,30 @@ class HeweatherWeatherSensor(Entity):
             self._state = self._data.temprature
         elif self._type == "humidity":
             self._state = self._data.humidity
-        # elif self._type == "feelsLike":
-        #     self._state = self._data.feelsLike
-        # elif self._type == "text":
-        #     self._state = self._data.text
-        # elif self._type == "windDir":
-        #     self._state = self._data.windDir
-        # elif self._type == "windScale":
-        #     self._state = self._data.windScale
-        # elif self._type == "windSpeed":
-        #     self._state = self._data.windSpeed
-        # elif self._type == "precip":
-        #     self._state = self._data.precip
+        elif self._type == "feelsLike":
+            self._state = self._data.feelsLike
+        elif self._type == "icon":
+            self._state = self._data.icon
+        elif self._type == "text":
+            self._state = self._data.text
+        elif self._type == "wind360":
+            self._state = self._data.wind360
+        elif self._type == "windDir":
+            self._state = self._data.windDir
+        elif self._type == "windScale":
+            self._state = self._data.windScale
+        elif self._type == "windSpeed":
+            self._state = self._data.windSpeed
+        elif self._type == "precip":
+            self._state = self._data.precip
+        elif self._type == "pressure":
+            self._state = self._data.pressure
+        elif self._type == "vis":
+            self._state = self._data.vis
+        elif self._type == "cloud":
+            self._state = self._data.cloud
+        elif self._type == "dew":
+            self._state = self._data.dew
         # elif self._type == "category":
         #     self._state = self._data.category
         # elif self._type == "primary":
@@ -205,19 +220,21 @@ class WeatherData(object):
         self._air_now_url = "https://devapi.qweather.com/v7/air/now?location="+location+"&key="+key
         self._disaster_warn_url = "https://devapi.qweather.com/v7/warning/now?location="+location+"&key="+key
         self._params = {"location": location, "key": key}
+        self._updatetime = None
         self._temprature = None
         self._humidity   = None
-        # self._feelsLike = None
-        # self._text = None
-        # self._windDir = None
-        # self._windScale = None
-        # self._windSpeed = None
-        # self._precip = None
-        # self._pressure = None
-        # self._vis = None
-        # self._cloud = None
-        # self._dew = None
-        # self._updatetime = None
+        self._feelsLike  = None
+        self._icon       = None
+        self._text       = None
+        self._wind360    = None
+        self._windDir    = None
+        self._windScale  = None
+        self._windSpeed  = None
+        self._precip     = None
+        self._pressure   = None
+        self._vis        = None
+        self._cloud      = None
+        self._dew        = None
         # self._category = None 
         # self._pm10 = None
         # self._primary = None
@@ -229,7 +246,7 @@ class WeatherData(object):
         # self._o3 = None
         # self._qlty = None
         self._disaster_warn = None
-        self._updatetime = None
+        
 
     # 温度
     @property
@@ -241,21 +258,66 @@ class WeatherData(object):
     def humidity(self):
         return self._humidity
 
-    # @property
-    # def feelsLike(self):
-    #     """体感温度"""
-    #     return self._feelsLike
+    # 体感温度
+    @property
+    def feelsLike(self):
+        return self._feelsLike
 
-    # @property
-    # def text(self):
-    #     """天气状况的文字描述，包括阴晴雨雪等天气状态的描述"""
-    #     return self._text
+    # 天气图标
+    @property
+    def icon(self):
+        return self._icon
+
+    # 天气描述
+    @property
+    def text(self):
+        return self._text
     
-    # @property
-    # def windDir(self):
-    #     """风向"""
-    #     return self._windDir
+    # 风向360角度
+    @property
+    def wind360(self):
+        return self._wind360
     
+    # 风向
+    @property
+    def windDir(self):
+        return self._windDir
+    
+    # 风力等级
+    @property
+    def windScale(self):
+        return self._windScale
+
+    # 风速
+    @property
+    def windSpeed(self):
+        return self._windSpeed
+
+    # 此小时降水量
+    @property
+    def precip(self):
+        return self._precip
+
+    # 大气压强
+    @property
+    def pressure(self):
+        return self._pressure
+    
+    # 能见度
+    @property
+    def vis(self):
+        return self._vis
+   
+    # 云量
+    @property
+    def cloud(self):
+        return self._cloud
+
+    # 露点温度
+    @property
+    def dew(self):
+        return self._dew
+
     # @property
     # def category(self):
     #     """空气质量指数级别"""
@@ -270,41 +332,6 @@ class WeatherData(object):
     # def primary(self):
     #     """空气质量的主要污染物，空气质量为优时，返回值为NA"""
     #     return self._primary
-    
-    # @property
-    # def windScale(self):
-    #     """风力等级"""
-    #     return self._windScale
-
-    # @property
-    # def windSpeed(self):
-    #     """风速，公里/小时"""
-    #     return self._windSpeed
-
-    # @property
-    # def precip(self):
-    #     """当前小时累计降水量，默认单位：毫米"""
-    #     return self._precip
-
-    # @property
-    # def pressure(self):
-    #     """大气压强，默认单位：百帕"""
-    #     return self._pressure
-    
-    # @property
-    # def vis(self):
-    #     """能见度，默认单位：公里"""
-    #     return self._vis
-   
-    # @property
-    # def cloud(self):
-    #     """云量，百分比数值。可能为空"""
-    #     return self._cloud
-
-    # @property
-    # def dew(self):
-    #     """露点温度。可能为空"""
-    #     return self._dew
 
     # @property
     # def pm25(self):
@@ -380,16 +407,18 @@ class WeatherData(object):
         self._updatetime = weather["obsTime"]
         self._temprature = weather["temp"]
         self._humidity   = weather["humidity"]
-        # self._feelsLike = weather["feelsLike"]
-        # self._text = weather["text"]
-        # self._windDir = weather["windDir"]
-        # self._windScale = weather["windScale"]
-        # self._windSpeed = weather["windSpeed"]
-        # self._precip = weather["precip"]
-        # self._pressure = weather["pressure"]
-        # self._vis = weather["vis"]
-        # self._cloud = weather["cloud"]
-        # self._dew = weather["dew"]
+        self._feelsLike  = weather["feelsLike"]
+        self._icon       = weather["icon"]
+        self._text       = weather["text"]
+        self._wind360    = weather["wind360"]
+        self._windDir    = weather["windDir"]
+        self._windScale  = weather["windScale"]
+        self._windSpeed  = weather["windSpeed"]
+        self._precip     = weather["precip"]
+        self._pressure   = weather["pressure"]
+        self._vis        = weather["vis"]
+        self._cloud      = weather["cloud"]
+        self._dew        = weather["dew"]
         
         # self._category = air["category"]
         # self._pm25 = air["pm2p5"]
