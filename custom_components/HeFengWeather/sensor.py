@@ -32,7 +32,7 @@ CONF_DISASTERMSG = "disastermsg"
 
 # 定义三个可选项：温度、湿度、PM2.5
 OPTIONS = {
-    "temprature": ["Heweather_temperature", "室外温度", "mdi:thermometer", TEMP_CELSIUS],
+    "temprature": ["HeFengweather_temperature", "室外温度", "mdi:thermometer", TEMP_CELSIUS],
 
     # "humidity": ["Heweather_humidity", "室外湿度", "mdi:water-percent", "%"],
     # "feelsLike": ["Heweather_feelsLike", "体感温度", "mdi:thermometer", TEMP_CELSIUS],
@@ -55,7 +55,7 @@ OPTIONS = {
     # "co": ["Heweather_co", "一氧化碳", "mdi:emoticon-dead", "μg/m3"],
     # "o3": ["Heweather_o3", "臭氧", "mdi:weather-cloudy", "μg/m3"],
     # "qlty": ["Heweather_qlty", "综合空气质量", "mdi:quality-high", " "],
-    # "disaster_warn": ["Heweather_disaster_warn", "灾害预警", "mdi:warning-outline", " "],
+    "disaster_warn": ["Heweather_disaster_warn", "灾害预警", "mdi:warning-outline", " "],
     }
 
 DISASTER_LEVEL = {
@@ -229,8 +229,8 @@ class WeatherData(object):
         # self._co = None
         # self._o3 = None
         # self._qlty = None
-        # self._disaster_warn = None
-        # self._updatetime = None
+        self._disaster_warn = None
+        self._updatetime = None
 
     # 温度
     @property
@@ -342,10 +342,11 @@ class WeatherData(object):
     #     """o3"""
     #     return self._o3
     
-    # @property
-    # def disaster_warn(self):
-    #     """灾害预警"""
-    #     return self._disaster_warn
+    # 灾害预警
+    @property
+    def disaster_warn(self):
+        """灾害预警"""
+        return self._disaster_warn
     
     # 更新时间
     @property
@@ -389,7 +390,7 @@ class WeatherData(object):
         # self._vis = weather["vis"]
         # self._cloud = weather["cloud"]
         # self._dew = weather["dew"]
-        # self._updatetime = weather["obsTime"]
+        self._updatetime = weather["obsTime"]
         # self._category = air["category"]
         # self._pm25 = air["pm2p5"]
         # self._pm10 = air["pm10"]
@@ -400,18 +401,18 @@ class WeatherData(object):
         # self._co = air["co"]
         # self._o3 = air["o3"]
         # self._qlty = air["aqi"]
-        # allmsg=''
-        # titlemsg=''
-        # for i in disaster_warn:
-        #     #if DISASTER_LEVEL[i["severity"]] >= 订阅等级:
-        #     if (DISASTER_LEVEL[i["severity"]] >= int(self._disasterlevel)):
-        #         allmsg = allmsg +i["title"] + ':' + i["text"] + '||'
-        #         titlemsg = titlemsg + i["title"] + '||'    
+        allmsg=''
+        titlemsg=''
+        for i in disaster_warn:
+            #if DISASTER_LEVEL[i["severity"]] >= 订阅等级:
+            if (DISASTER_LEVEL[i["severity"]] >= int(self._disasterlevel)):
+                allmsg = allmsg +i["title"] + ':' + i["text"] + '||'
+                titlemsg = titlemsg + i["title"] + '||'    
             
-        # if(len(titlemsg)<5):
-        #     self._disaster_warn =  '近日无'+ self._disasterlevel +'级及以上灾害'  
-        # #if(订阅标题)
-        # elif(self._disastermsg=='title'):
-        #     self._disaster_warn =  titlemsg
-        # else:
-        #     self._disaster_warn =  allmsg
+        if(len(titlemsg)<5):
+            self._disaster_warn =  '近日无'+ self._disasterlevel +'级及以上灾害'  
+        #if(订阅标题)
+        elif(self._disastermsg=='title'):
+            self._disaster_warn =  titlemsg
+        else:
+            self._disaster_warn =  allmsg
