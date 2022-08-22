@@ -186,24 +186,26 @@ class HeweatherWeatherSensor(Entity):
             self._state = self._data.cloud
         elif self._type == "dew":
             self._state = self._data.dew
-        # elif self._type == "category":
-        #     self._state = self._data.category
-        # elif self._type == "primary":
-        #     self._state = self._data.primary
-        # elif self._type == "level":
-        #     self._state = self._data.level
-        # elif self._type == "pm10":
-        #     self._state = self._data.pm10
-        # elif self._type == "pm25":
-        #     self._state = self._data.pm25
-        # elif self._type == "no2":
-        #     self._state = self._data.no2
-        # elif self._type == "so2":
-        #     self._state = self._data.so2
-        # elif self._type == "co":
-        #     self._state = self._data.co
-        # elif self._type == "o3":
-        #     self._state = self._data.o3
+        elif self._type == "aqi":
+            self._state = self._data.aqi
+        elif self._type == "level":
+            self._state = self._data.level
+        elif self._type == "category":
+            self._state = self._data.category
+        elif self._type == "primary":
+            self._state = self._data.primary
+        elif self._type == "pm10":
+            self._state = self._data.pm10
+        elif self._type == "pm25":
+            self._state = self._data.pm25
+        elif self._type == "no2":
+            self._state = self._data.no2
+        elif self._type == "so2":
+            self._state = self._data.so2
+        elif self._type == "co":
+            self._state = self._data.co
+        elif self._type == "o3":
+            self._state = self._data.o3
         # elif self._type == "qlty":
         #     self._state = self._data.qlty
         # elif self._type == "disaster_warn":
@@ -235,15 +237,16 @@ class WeatherData(object):
         self._vis        = None
         self._cloud      = None
         self._dew        = None
-        # self._category = None 
-        # self._pm10 = None
-        # self._primary = None
-        # self._level = None
-        # self._pm25 = None
-        # self._no2 = None
-        # self._so2 = None
-        # self._co = None
-        # self._o3 = None
+        self._aqi        = None
+        self._level      = None
+        self._category   = None
+        self._primary    = None
+        self._pm10       = None
+        self._pm25       = None
+        self._no2        = None
+        self._so2        = None
+        self._co         = None
+        self._o3         = None
         # self._qlty = None
         self._disaster_warn = None
         
@@ -318,55 +321,64 @@ class WeatherData(object):
     def dew(self):
         return self._dew
 
-    # @property
-    # def category(self):
-    #     """空气质量指数级别"""
-    #     return self._category
+    # 空气质量指数
+    @property
+    def category(self):
+        return self._category
+
+    # 空气质量指数等级
+    @property
+    def level(self):
+        return self._level
+
+    # 空气质量指数级别
+    @property
+    def category(self):
+        return self._category
+
+    # 空气质量的主要污染物
+    @property
+    def primary(self):
+        return self._primary
+
+    # pm10
+    @property
+    def pm10(self):
+        return self._pm10
     
-    # @property
-    # def level(self):
-    #     """空气质量指数等级"""
-    #     return self._level
+    # pm2.5
+    @property
+    def pm25(self):
+        return self._pm25
 
-    # @property
-    # def primary(self):
-    #     """空气质量的主要污染物，空气质量为优时，返回值为NA"""
-    #     return self._primary
+    # no2
+    @property
+    def no2(self):
+        return self._no2
 
-    # @property
-    # def pm25(self):
-    #     """pm2.5"""
-    #     return self._pm25
+    # no2
+    @property
+    def no2(self):
+        return self._no2
 
-    # @property
-    # def pm10(self):
-    #     """pm10"""
-    #     return self._pm10
+    # so2
+    @property
+    def so2(self):
+        return self._so2
+
+    # co
+    @property
+    def co(self):
+        return self._co
     
+    # o3
+    @property
+    def o3(self):
+        return self._o3
     # @property
     # def qlty(self):
     #     """(aqi)空气质量指数"""
     #     return self._qlty
-    
-    # @property
-    # def no2(self):
-    #     """no2"""
-    #     return self._no2
-
-    # @property
-    # def co(self):
-    #     """co"""
-    #     return self._co
-    
-    # @property
-    # def so2(self):
-    #     """so2"""
-    #     return self._so2
-    
-    # @property
-    # def o3(self):
-    #     """o3"""
-    #     return self._o3
     
     # 灾害预警
     @property
@@ -419,16 +431,16 @@ class WeatherData(object):
         self._vis        = weather["vis"]
         self._cloud      = weather["cloud"]
         self._dew        = weather["dew"]
-        
-        # self._category = air["category"]
-        # self._pm25 = air["pm2p5"]
-        # self._pm10 = air["pm10"]
-        # self._primary = air["primary"]
-        # self._level = air["level"]
-        # self._no2 = air["no2"]
-        # self._so2 = air["so2"]
-        # self._co = air["co"]
-        # self._o3 = air["o3"]
+        self._category   = air["aqi"]
+        self._level      = air["level"]
+        self._category   = air["category"]
+        self._primary    = air["primary"]
+        self._pm10       = air["pm10"]
+        self._pm25       = air["pm25"]
+        self._no2        = air["no2"]
+        self._so2        = air["so2"]
+        self._co         = air["co"]
+        self._o3         = air["o3"]
         # self._qlty = air["aqi"]
         allmsg=''
         titlemsg=''
