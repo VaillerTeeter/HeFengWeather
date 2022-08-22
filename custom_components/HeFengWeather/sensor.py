@@ -32,31 +32,31 @@ CONF_DISASTERMSG   = "disastermsg"
 
 # 定义三个可选项：温度、湿度、PM2.5
 OPTIONS = {
-    "temprature": ["HeFengweather_temperature", "室外温度"    , "mdi:thermometer"           , TEMP_CELSIUS],
-    "humidity"  : ["HeFengweather_humidity"   , "室外湿度"    , "mdi:water-percent"         , "%"         ],
-    "feelsLike" : ["HeFengweather_feelsLike"  , "体感温度"    , "mdi:thermometer"           , TEMP_CELSIUS],
-    "icon"      : ["HeFengweather_icon"       , "天气图标"    , None                        , None        ],
-    "text"      : ["HeFengweather_text"       , "天气描述"    , None                        , None        ],
-    "wind360"   : ["HeFengweather_wind360"    , "风向360角度" , "mdi:weather-windy"         , None        ],
-    "windDir"   : ["HeFengweather_windDir"    , "风向"        , "mdi:weather-windy"         , None        ],
-    "windScale" : ["HeFengweather_windScale"  , "风力等级"    , "mdi:weather-windy"         , None        ],
-    "windSpeed" : ["HeFengweather_windSpeed"  , "风速"        , "mdi:weather-windy"         , "km/h"      ],
-    "precip"    : ["HeFengweather_precip"     , "此小时降水量" , "mdi:weather-pouring"      , "mm"        ],
-    "pressure"  : ["HeFengweather_pressure"   , "大气压强"    , "mdi:car-brake-low-pressure", "hPa"       ],
-    "vis"       : ["HeFengweather_vis"        , "能见度"      , "mdi:eye-outline"           , "km"        ],
-    "cloud"     : ["HeFengweather_cloud"      , "云量"        , "mdi:clouds"                , None        ],
-    "dew"       : ["HeFengweather_dew"        , "露点温度"    , "mdi:thermometer"           , None        ],
-    
-    # "primary": ["Heweather_primary", "空空气质量的主要污染物", "mdi:walk", " "],
-    # "category": ["Heweather_category", "空气质量指数级别", "mdi:walk", " "],
-    # "level": ["Heweather_level", "空气质量指数等级", "mdi:walk", " "],
-    # "pm25": ["Heweather_pm25", "PM2.5", "mdi:walk", "μg/m3"],
-    # "pm10": ["Heweather_pm10", "PM10", "mdi:walk", "μg/m3"],
-    # "no2": ["Heweather_no2", "二氧化氮", "mdi:emoticon-dead", "μg/m3"],
-    # "so2": ["Heweather_so2", "二氧化硫", "mdi:emoticon-dead", "μg/m3"],
-    # "co": ["Heweather_co", "一氧化碳", "mdi:emoticon-dead", "μg/m3"],
-    # "o3": ["Heweather_o3", "臭氧", "mdi:weather-cloudy", "μg/m3"],
-    # "qlty": ["Heweather_qlty", "综合空气质量", "mdi:quality-high", " "],
+    "temprature": ["HeFengweather_temperature", "室外温度", "mdi:thermometer", TEMP_CELSIUS],
+    "humidity": ["HeFengweather_humidity", "室外湿度", "mdi:water-percent", "%"],
+    "feelsLike": ["HeFengweather_feelsLike", "体感温度", "mdi:thermometer", TEMP_CELSIUS],
+    # "icon": ["HeFengweather_icon", "天气图标", None, None],
+    # "text": ["HeFengweather_text", "天气描述", None, None],
+    "wind360": ["HeFengweather_wind360", "风向360角度", "mdi:weather-windy", None],
+    "windDir": ["HeFengweather_windDir", "风向", "mdi:weather-windy", None],
+    "windScale": ["HeFengweather_windScale", "风力等级", "mdi:weather-windy", None],
+    "windSpeed": ["HeFengweather_windSpeed", "风速", "mdi:weather-windy", "km/h"],
+    "precip": ["HeFengweather_precip", "此小时降水量", "mdi:weather-pouring", "mm"],
+    "pressure": ["HeFengweather_pressure", "大气压强", "mdi:car-brake-low-pressure", "hPa"],
+    "vis": ["HeFengweather_vis", "能见度", "mdi:eye-outline", "km"],
+    "cloud": ["HeFengweather_cloud", "云量", "mdi:clouds", "%"],
+    "dew": ["HeFengweather_dew", "露点温度", "mdi:thermometer", TEMP_CELSIUS],
+    "aqi": ["HeFengweather_aqi", "空气质量指数", "mdi:walk", None],
+    "level": ["HeFengweather_level", "空气质量指数等级", "mdi:walk", None],
+    "category": ["HeFengweather_category", "空气质量指数级别", "mdi:walk", None],
+    "primary": ["HeFengweather_primary", "空气质量的主要污染物", "mdi:walk", None],
+    "pm10": ["HeFengweather_pm10", "PM10", "mdi:emoticon-dead", "μg/m3"],
+    "pm25": ["Heweather_pm25", "PM2.5", "mdi:emoticon-dead", "μg/m3"],
+    "no2": ["Heweather_no2", "二氧化氮", "mdi:emoticon-dead", "μg/m3"],
+    "so2": ["Heweather_so2", "二氧化硫", "mdi:emoticon-dead", "μg/m3"],
+    "co": ["Heweather_co", "一氧化碳", "mdi:emoticon-dead", "μg/m3"],
+    "o3": ["Heweather_o3", "臭氧", "mdi:emoticon-dead", "μg/m3"],
+    # "qlty": ["Heweather_qlty", "综合空气质量", "mdi:quality-high", None],
     "disaster_warn": ["Heweather_disaster_warn", "灾害预警", "mdi:warning-outline", " "],
     }
 
@@ -164,10 +164,10 @@ class HeweatherWeatherSensor(Entity):
             self._state = self._data.humidity
         elif self._type == "feelsLike":
             self._state = self._data.feelsLike
-        elif self._type == "icon":
-            self._state = self._data.icon
-        elif self._type == "text":
-            self._state = self._data.text
+        # elif self._type == "icon":
+        #     self._state = self._data.icon
+        # elif self._type == "text":
+        #     self._state = self._data.text
         elif self._type == "wind360":
             self._state = self._data.wind360
         elif self._type == "windDir":
@@ -224,8 +224,8 @@ class WeatherData(object):
         self._temprature = None
         self._humidity   = None
         self._feelsLike  = None
-        self._icon       = None
-        self._text       = None
+        # self._icon       = None
+        # self._text       = None
         self._wind360    = None
         self._windDir    = None
         self._windScale  = None
@@ -263,15 +263,15 @@ class WeatherData(object):
     def feelsLike(self):
         return self._feelsLike
 
-    # 天气图标
-    @property
-    def icon(self):
-        return self._icon
+    # # 天气图标
+    # @property
+    # def icon(self):
+    #     return self._icon
 
-    # 天气描述
-    @property
-    def text(self):
-        return self._text
+    # # 天气描述
+    # @property
+    # def text(self):
+    #     return self._text
     
     # 风向360角度
     @property
@@ -408,8 +408,8 @@ class WeatherData(object):
         self._temprature = weather["temp"]
         self._humidity   = weather["humidity"]
         self._feelsLike  = weather["feelsLike"]
-        self._icon       = weather["icon"]
-        self._text       = weather["text"]
+        # self._icon       = weather["icon"]
+        # self._text       = weather["text"]
         self._wind360    = weather["wind360"]
         self._windDir    = weather["windDir"]
         self._windScale  = weather["windScale"]
